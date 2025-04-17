@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мамлакатлар - Авиа Чипталар</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .country-banner {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .country-flag {
+            position: absolute;
+            bottom: -20px;
+            left: 20px;
+            width: 60px;
+            height: 40px;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .country-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-plane-departure me-2"></i>Авиа Чипталар
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Бош саҳифа</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="flights.html">Рейслар</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="countries.html">Мамлакатлар</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Алоқа</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>Ҳисоб
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="register.html">Рўйхатдан ўтиш</a></li>
+                            <li><a class="dropdown-item" href="login.html">Кириш</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="my-tickets.html">Менинг чипталарим</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Countries Header -->
+    <header class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold text-primary mb-3">Саёҳат учун мамлакатлар</h1>
+                    <p class="lead">Дунёнинг энг гўзал мамлакатларига саёҳат қилинг. Биз энг яхши саёҳат йўналишларини танладик.</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <input type="search" class="form-control form-control-lg" placeholder="Мамлакат номини киритинг..." id="country-search">
+                        <button class="btn btn-primary btn-lg" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Continent Filters -->
+    <section class="py-3 bg-white border-bottom">
+        <div class="container">
+            <div class="d-flex justify-content-center flex-wrap">
+                <button class="btn btn-outline-primary m-1 country-filter-btn active" data-filter="all">
+                    Барча мамлакатлар
+                </button>
+                <button class="btn btn-outline-primary m-1 country-filter-btn" data-filter="Europe">
+                    Европа
+                </button>
+                <button class="btn btn-outline-primary m-1 country-filter-btn" data-filter="Asia">
+                    Осиё
+                </button>
+                <button class="btn btn-outline-primary m-1 country-filter-btn" data-filter="North America">
+                    Шимолий Америка
+                </button>
+                <button class="btn btn-outline-primary m-1 country-filter-btn" data-filter="Middle East">
+                    Яқин Шарқ
+                </button>
+                <button class="btn btn-outline-primary m-1 country-filter-btn" data-filter="Africa">
+                    Африка
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countries Grid -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4" id="countries-container">
+                <!-- Country Card 1 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Europe">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1520106212299-d99c443e4568?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png" class="country-flag" alt="Russian Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Россия</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Москва, Санкт-Петербург</span>
+                                <span class="badge bg-primary">Визасиз</span>
+                            </div>
+                            <p class="card-text">Россия - табиий ва маданий жиҳатдан ранг-баранг мамлакат. Москва ва Санкт-Петербург каби ажойиб шаҳарларида ўзининг тарихий ва маданий меросини намойиш этади.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>1,200,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Moscow" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Card 2 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Europe">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/320px-Flag_of_Turkey.svg.png" class="country-flag" alt="Turkish Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Туркия</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Истанбул, Анталья</span>
+                                <span class="badge bg-primary">Визасиз</span>
+                            </div>
+                            <p class="card-text">Туркия - Европа ва Осиё ўртасида жойлашган мамлакат. Истанбул шаҳри икки қитъада жойлашган ягона шаҳардир. Ажойиб пляжлар, тарихий ёдгорликлар ва мазали таомлар билан машҳур.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>1,500,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Istanbul" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Card 3 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Middle East">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/320px-Flag_of_the_United_Arab_Emirates.svg.png" class="country-flag" alt="UAE Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Бирлашган Араб Амирликлари</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Дубай, Абу Даби</span>
+                                <span class="badge bg-primary">Визасиз</span>
+                            </div>
+                            <p class="card-text">БАА замонавий шаҳарлар, ҳашаматли бинолар ва чўл бўйлаб саргузаштлар билан машҳур. Дунёдаги энг баланд бино - Бурж Халифа шу ерда жойлашган.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>2,300,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Dubai" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Card 4 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Asia">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1534274867514-d5b47ef89ed7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/320px-Flag_of_South_Korea.svg.png" class="country-flag" alt="South Korean Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Жанубий Корея</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Сеул, Пусан</span>
+                                <span class="badge bg-warning text-dark">Виза керак</span>
+                            </div>
+                            <p class="card-text">Технологик ютуқлар ва қадимий анъаналар уйғунлашган мамлакат. К-поп, корейс сериаллари ва замонавий технология маҳсулотлари билан машҳур.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>3,500,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Seoul" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Card 5 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Asia">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1508009603885-50cf7c8dd0d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_Thailand.svg/320px-Flag_of_Thailand.svg.png" class="country-flag" alt="Thailand Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Таиланд</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Бангкок, Пхукет</span>
+                                <span class="badge bg-warning text-dark">Виза керак</span>
+                            </div>
+                            <p class="card-text">Таиланд ўзининг ажойиб пляжлари, тарихий ибодатхоналари ва хушмуомала аҳолиси билан машҳур. "Табассумлар мамлакати" деб аталади.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>2,800,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Bangkok" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Card 6 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="North America">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1485738422979-f5c462d49f74?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/320px-Flag_of_the_United_States.svg.png" class="country-flag" alt="USA Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Америка Қўшма Штатлари</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Нью-Йорк, Лос-Анжелес</span>
+                                <span class="badge bg-danger">Виза мураккаб</span>
+                            </div>
+                            <p class="card-text">АҚШ дунёдаги энг машҳур сайёҳлик йўналишларидан бири. Ҳар бир штат ўзига хос жозибани таклиф этади - метрополислардан тортиб миллий боғларгача.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>4,500,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=New+York" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Country Card 7 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Asia">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png" class="country-flag" alt="Japan Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Япония</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Токио, Киото</span>
+                                <span class="badge bg-warning text-dark">Виза керак</span>
+                            </div>
+                            <p class="card-text">Япония - анъана ва инновацияларнинг уйғунлашган мамлакати. Токио ва Киото сингари тарихий ва замонавий шаҳарлар сайёҳларни мафтун этади.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>3,800,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Tokyo" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Country Card 8 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Europe">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1473&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/320px-Flag_of_France.svg.png" class="country-flag" alt="France Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Франция</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Париж, Ницца</span>
+                                <span class="badge bg-warning text-dark">Виза керак</span>
+                            </div>
+                            <p class="card-text">Франция - санъат, таом ва маданият мамлакати. Париждаги Эйфел минораси, Луврдаги санъат асарлари ва француз таомлари дунёда машҳур.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>3,200,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Paris" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Country Card 9 -->
+                <div class="col-md-6 col-lg-4 country-card" data-continent="Africa">
+                    <div class="card h-100 shadow-sm">
+                        <div class="country-banner" style="background-image: url('https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80')">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Flag_of_Egypt.svg/320px-Flag_of_Egypt.svg.png" class="country-flag" alt="Egypt Flag">
+                            <div class="country-overlay">
+                                <h4 class="mb-0">Миср</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Қоҳира, Хургада</span>
+                                <span class="badge bg-warning text-dark">Виза керак</span>
+                            </div>
+                            <p class="card-text">Миср - пирамидалар, қадимий тарих ва Нил дарёси мамлакати. Бу ерда қадимги цивилизация ёдгорликлари ва Қизил денгиз қирғоғидаги курортлар мавжуд.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <strong class="text-primary">Чипталар:</strong>
+                                    <span>2,500,000 сўмдан</span>
+                                </div>
+                                <a href="flights.html?destination=Cairo" class="btn btn-outline-primary">Чипталар</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="mb-3">Авиа Чипталар</h5>
+                    <p>Сизнинг ишончли сафар шеригингиз. Биз билан бутун дунё бўйлаб саёҳат қилинг!</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="mb-3">Ҳаволалар</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Бош саҳифа</a></li>
+                        <li><a href="flights.html" class="text-white">Рейслар</a></li>
+                        <li><a href="countries.html" class="text-white">Мамлакатлар</a></li>
+                        <li><a href="contact.html" class="text-white">Алоқа</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="mb-3">Маълумот</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Чиптани қайтариш</a></li>
+                        <li><a href="#" class="text-white">Чиптани алмаштириш</a></li>
+                        <li><a href="#" class="text-white">Фойдаланиш шартлари</a></li>
+                        <li><a href="#" class="text-white">Хусусийлик сиёсати</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="mb-3">Алоқа</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Тошкент ш., Амир Темур кўчаси, 12</li>
+                        <li><i class="fas fa-phone me-2"></i> +998 71 123 45 67</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@aviachiptalar.uz</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 Авиа Чипталар. Барча ҳуқуқлар ҳимояланган.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <a href="#" class="text-white">Фойдаланиш шартлари</a> | 
+                        <a href="#" class="text-white">Хусусийлик сиёсати</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    <!-- Countries JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Country filtering
+            const filterButtons = document.querySelectorAll('.country-filter-btn');
+            const countryCards = document.querySelectorAll('.country-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get filter value
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Filter country cards
+                    countryCards.forEach(card => {
+                        if (filterValue === 'all') {
+                            card.style.display = 'block';
+                        } else {
+                            if (card.getAttribute('data-continent') === filterValue) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Country search
+            const countrySearch = document.getElementById('country-search');
+            if (countrySearch) {
+                countrySearch.addEventListener('input', function() {
+                    const searchValue = this.value.toLowerCase().trim();
+                    
+                    countryCards.forEach(card => {
+                        const countryName = card.querySelector('.country-overlay h4').textContent.toLowerCase();
+                        const cityNames = card.querySelector('.text-muted').textContent.toLowerCase();
+                        
+                        if (countryName.includes(searchValue) || cityNames.includes(searchValue)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // Reset filter buttons if search is being used
+                    if (searchValue !== '') {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        filterButtons[0].classList.add('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

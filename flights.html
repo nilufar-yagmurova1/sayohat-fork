@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рейслар - Авиа Чипталар</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .flight-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .flight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            border-color: rgba(13, 110, 253, 0.3);
+        }
+        
+        .airline-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .flight-time {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .flight-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        
+        .flight-path {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 10px 0;
+        }
+        
+        .flight-line {
+            height: 2px;
+            background: linear-gradient(to right, #0d6efd, #7abaff);
+            flex-grow: 1;
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .flight-path i.fa-plane {
+            color: #0d6efd;
+            transform: rotate(90deg);
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .flight-path i.fa-circle {
+            color: #0d6efd;
+            font-size: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .flight-path .connection {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+            color: #666;
+        }
+        
+        .filters-section {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            border-bottom: 2px solid rgba(13, 110, 253, 0.2);
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        
+        .pagination .page-link {
+            color: #0d6efd;
+        }
+        
+        .form-range::-webkit-slider-thumb {
+            background: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-plane-departure me-2"></i>Авиа Чипталар
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Бош саҳифа</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="flights.html">Рейслар</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="countries.html">Мамлакатлар</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Алоқа</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>Ҳисоб
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="register.html">Рўйхатдан ўтиш</a></li>
+                            <li><a class="dropdown-item" href="login.html">Кириш</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="my-tickets.html">Менинг чипталарим</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Parameters -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form id="flight-search-form">
+                        <div class="row g-3">
+                            <div class="col-md-6 col-lg-2">
+                                <label for="departure" class="form-label">Жўнатиш жойи</label>
+                                <select class="form-select" id="departure" required>
+                                    <option value="Tashkent" selected>Тошкент</option>
+                                    <option value="Samarkand">Самарқанд</option>
+                                    <option value="Bukhara">Бухоро</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-lg-2">
+                                <label for="destination" class="form-label">Мақсад жойи</label>
+                                <select class="form-select" id="destination" required>
+                                    <option value="Moscow" selected>Москва</option>
+                                    <option value="Dubai">Дубай</option>
+                                    <option value="Istanbul">Истанбул</option>
+                                    <option value="Seoul">Сеул</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 col-lg-2">
+                                <label for="departure-date" class="form-label">Жўнаб кетиш</label>
+                                <input type="date" class="form-control" id="departure-date" value="2023-12-10" required>
+                            </div>
+                            <div class="col-md-4 col-lg-2">
+                                <label for="return-date" class="form-label">Қайтиш</label>
+                                <input type="date" class="form-control" id="return-date" value="2023-12-20">
+                            </div>
+                            <div class="col-md-4 col-lg-2">
+                                <label for="passengers" class="form-label">Йўловчилар</label>
+                                <select class="form-select" id="passengers" required>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search me-2"></i>Қидириш
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flight Results -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="mb-4">Тошкент → Москва учун рейслар</h2>
+            <p class="text-muted mb-4">10 декабр, 2023 - 1 йўловчи</p>
+            
+            <!-- Filters -->
+            <div class="row mb-4">
+                <div class="col-lg-3 mb-3 mb-lg-0">
+                    <div class="card filters-section">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Фильтрлар</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6>Нарх диапазони</h6>
+                            <div class="mb-3">
+                                <input type="range" class="form-range" min="0" max="5000000" step="100000" id="price-range">
+                                <div class="d-flex justify-content-between">
+                                    <span>0 сўм</span>
+                                    <span id="price-value">2,500,000 сўм</span>
+                                    <span>5,000,000 сўм</span>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <h6>Авиакомпаниялар</h6>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="airline-uzbekistan" checked>
+                                    <label class="form-check-label" for="airline-uzbekistan">
+                                        Uzbekistan Airways
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="airline-aeroflot" checked>
+                                    <label class="form-check-label" for="airline-aeroflot">
+                                        Aeroflot
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="airline-turkish" checked>
+                                    <label class="form-check-label" for="airline-turkish">
+                                        Turkish Airlines
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="airline-emirates" checked>
+                                    <label class="form-check-label" for="airline-emirates">
+                                        Emirates
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <h6>Учиш вақти</h6>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="time-morning" checked>
+                                    <label class="form-check-label" for="time-morning">
+                                        Эрталаб (06:00 - 12:00)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="time-afternoon" checked>
+                                    <label class="form-check-label" for="time-afternoon">
+                                        Кундузи (12:00 - 18:00)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="time-evening" checked>
+                                    <label class="form-check-label" for="time-evening">
+                                        Кечқурун (18:00 - 00:00)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="time-night" checked>
+                                    <label class="form-check-label" for="time-night">
+                                        Тунда (00:00 - 06:00)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <button class="btn btn-outline-primary w-100">
+                                <i class="fas fa-filter me-2"></i>Фильтрлаш
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-9">
+                    <!-- Flight Card 1 -->
+                    <div class="flight-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Uzbekistan_Airways_logo.svg/240px-Uzbekistan_Airways_logo.svg.png" class="airline-logo mb-2" alt="Uzbekistan Airways">
+                                <div>Uzbekistan Airways</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">07:30</div>
+                                <div class="text-muted">TAS - Тошкент</div>
+                            </div>
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <div class="text-muted">4 соат 30 дақиқа</div>
+                                <div class="flight-path">
+                                    <i class="fas fa-plane"></i>
+                                    <div class="flight-line"></div>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="text-muted">Тўғридан-тўғри</div>
+                            </div>
+                            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">12:00</div>
+                                <div class="text-muted">MOW - Москва</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-end">
+                                <div class="flight-price mb-2">1,450,000 сўм</div>
+                                <a href="booking.html?flightId=UZ123" class="btn btn-primary">Танлаш</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flight Card 2 -->
+                    <div class="flight-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Aeroflot_logo_%28en%29.svg/240px-Aeroflot_logo_%28en%29.svg.png" class="airline-logo mb-2" alt="Aeroflot">
+                                <div>Aeroflot</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">10:45</div>
+                                <div class="text-muted">TAS - Тошкент</div>
+                            </div>
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <div class="text-muted">4 соат 15 дақиқа</div>
+                                <div class="flight-path">
+                                    <i class="fas fa-plane"></i>
+                                    <div class="flight-line"></div>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="text-muted">Тўғридан-тўғри</div>
+                            </div>
+                            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">15:00</div>
+                                <div class="text-muted">MOW - Москва</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-end">
+                                <div class="flight-price mb-2">1,380,000 сўм</div>
+                                <a href="booking.html?flightId=SU456" class="btn btn-primary">Танлаш</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flight Card 3 -->
+                    <div class="flight-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Turkish_Airlines_logo_2019.svg/240px-Turkish_Airlines_logo_2019.svg.png" class="airline-logo mb-2" alt="Turkish Airlines">
+                                <div>Turkish Airlines</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">14:20</div>
+                                <div class="text-muted">TAS - Тошкент</div>
+                            </div>
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <div class="text-muted">7 соат 40 дақиқа</div>
+                                <div class="flight-path">
+                                    <i class="fas fa-plane"></i>
+                                    <div class="flight-line">
+                                        <span class="connection">IST</span>
+                                    </div>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="text-muted">1 алмашинув (IST)</div>
+                            </div>
+                            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">22:00</div>
+                                <div class="text-muted">MOW - Москва</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-end">
+                                <div class="flight-price mb-2">1,650,000 сўм</div>
+                                <a href="booking.html?flightId=TK789" class="btn btn-primary">Танлаш</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flight Card 4 -->
+                    <div class="flight-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Uzbekistan_Airways_logo.svg/240px-Uzbekistan_Airways_logo.svg.png" class="airline-logo mb-2" alt="Uzbekistan Airways">
+                                <div>Uzbekistan Airways</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">18:45</div>
+                                <div class="text-muted">TAS - Тошкент</div>
+                            </div>
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <div class="text-muted">4 соат 30 дақиқа</div>
+                                <div class="flight-path">
+                                    <i class="fas fa-plane"></i>
+                                    <div class="flight-line"></div>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="text-muted">Тўғридан-тўғри</div>
+                            </div>
+                            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">23:15</div>
+                                <div class="text-muted">MOW - Москва</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-end">
+                                <div class="flight-price mb-2">1,520,000 сўм</div>
+                                <a href="booking.html?flightId=UZ567" class="btn btn-primary">Танлаш</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flight Card 5 -->
+                    <div class="flight-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Aeroflot_logo_%28en%29.svg/240px-Aeroflot_logo_%28en%29.svg.png" class="airline-logo mb-2" alt="Aeroflot">
+                                <div>Aeroflot</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">23:50</div>
+                                <div class="text-muted">TAS - Тошкент</div>
+                            </div>
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <div class="text-muted">4 соат 10 дақиқа</div>
+                                <div class="flight-path">
+                                    <i class="fas fa-plane"></i>
+                                    <div class="flight-line"></div>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="text-muted">Тўғридан-тўғри</div>
+                            </div>
+                            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">04:00</div>
+                                <div class="text-muted">MOW - Москва</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-end">
+                                <div class="flight-price mb-2">1,280,000 сўм</div>
+                                <a href="booking.html?flightId=SU890" class="btn btn-primary">Танлаш</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flight Card 6 -->
+                    <div class="flight-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/200px-Emirates_logo.svg.png" class="airline-logo mb-2" alt="Emirates">
+                                <div>Emirates</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">09:15</div>
+                                <div class="text-muted">TAS - Тошкент</div>
+                            </div>
+                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                <div class="text-muted">11 соат 45 дақиқа</div>
+                                <div class="flight-path">
+                                    <i class="fas fa-plane"></i>
+                                    <div class="flight-line">
+                                        <span class="connection">DXB</span>
+                                    </div>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="text-muted">1 алмашинув (DXB)</div>
+                            </div>
+                            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                <div class="flight-time">21:00</div>
+                                <div class="text-muted">MOW - Москва</div>
+                            </div>
+                            <div class="col-md-3 text-center text-md-end">
+                                <div class="flight-price mb-2">2,850,000 сўм</div>
+                                <a href="booking.html?flightId=EK321" class="btn btn-primary">Танлаш</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Flight search results pages" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Олдинги</a>
+                            </li>
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Кейинги</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="mb-3">Авиа Чипталар</h5>
+                    <p>Сизнинг ишончли сафар шеригингиз. Биз билан бутун дунё бўйлаб саёҳат қилинг!</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="mb-3">Ҳаволалар</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Бош саҳифа</a></li>
+                        <li><a href="flights.html" class="text-white">Рейслар</a></li>
+                        <li><a href="countries.html" class="text-white">Мамлакатлар</a></li>
+                        <li><a href="contact.html" class="text-white">Алоқа</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="mb-3">Маълумот</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Чиптани қайтариш</a></li>
+                        <li><a href="#" class="text-white">Чиптани алмаштириш</a></li>
+                        <li><a href="#" class="text-white">Фойдаланиш шартлари</a></li>
+                        <li><a href="#" class="text-white">Хусусийлик сиёсати</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="mb-3">Алоқа</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Тошкент ш., Амир Темур кўчаси, 12</li>
+                        <li><i class="fas fa-phone me-2"></i> +998 71 123 45 67</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@aviachiptalar.uz</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 Авиа Чипталар. Барча ҳуқуқлар ҳимояланган.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <a href="#" class="text-white">Фойдаланиш шартлари</a> | 
+                        <a href="#" class="text-white">Хусусийлик сиёсати</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    <!-- Flight Search JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update price range value display
+            const priceRange = document.getElementById('price-range');
+            const priceValue = document.getElementById('price-value');
+            
+            if (priceRange && priceValue) {
+                priceRange.addEventListener('input', function() {
+                    // Format the price with commas
+                    priceValue.textContent = Number(this.value).toLocaleString() + ' сўм';
+                });
+            }
+            
+            // Get search parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const departure = urlParams.get('departure');
+            const destination = urlParams.get('destination');
+            const departureDate = urlParams.get('departureDate');
+            const returnDate = urlParams.get('returnDate');
+            const passengers = urlParams.get('passengers');
+            
+            // Fill the search form with URL parameters if available
+            if (departure && document.getElementById('departure')) {
+                document.getElementById('departure').value = departure;
+            }
+            
+            if (destination && document.getElementById('destination')) {
+                document.getElementById('destination').value = destination;
+            }
+            
+            if (departureDate && document.getElementById('departure-date')) {
+                document.getElementById('departure-date').value = departureDate;
+            }
+            
+            if (returnDate && document.getElementById('return-date')) {
+                document.getElementById('return-date').value = returnDate;
+            }
+            
+            if (passengers && document.getElementById('passengers')) {
+                document.getElementById('passengers').value = passengers;
+            }
+            
+            // Handle filter changes
+            const filterCheckboxes = document.querySelectorAll('.form-check-input');
+            if (filterCheckboxes.length > 0) {
+                filterCheckboxes.forEach(function(checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        // In a real application, this would filter the results
+                        // For demo purposes, we'll just show a message
+                        showAlert('Фильтрлар қўлланилди', 'success');
+                    });
+                });
+            }
+            
+            // Helper function to show alerts
+            function showAlert(message, type) {
+                // Create alert element
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+                alertDiv.role = 'alert';
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                // Find alert container
+                let alertContainer = document.querySelector('.alert-container');
+                
+                // If container doesn't exist, create it
+                if (!alertContainer) {
+                    alertContainer = document.createElement('div');
+                    alertContainer.className = 'alert-container position-fixed top-0 start-50 translate-middle-x p-3';
+                    alertContainer.style.zIndex = '1050';
+                    document.body.appendChild(alertContainer);
+                }
+                
+                // Add alert to container
+                alertContainer.appendChild(alertDiv);
+                
+                // Auto-dismiss after 5 seconds
+                setTimeout(function() {
+                    if (alertDiv.parentNode) {
+                        const bsAlert = new bootstrap.Alert(alertDiv);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html> 
